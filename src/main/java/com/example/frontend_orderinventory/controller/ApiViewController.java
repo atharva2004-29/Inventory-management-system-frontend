@@ -85,6 +85,49 @@ public class ApiViewController {
         return "api-result";
     }
 
+    @GetMapping("/{entity}/{subType}/{id}")
+    public String getEntityBySubType(@PathVariable String entity, @PathVariable String subType, @PathVariable Integer id, Model model) {
+        try {
+            Object rawData = null;
+            if ("orders".equals(entity)) {
+                if ("customer".equals(subType)) {
+                    rawData = orderApiClient.findByCustomerId(id);
+                    model.addAttribute("title", "Orders for Customer ID " + id);
+                } else if ("store".equals(subType)) {
+                    rawData = orderApiClient.findByStoreId(id);
+                    model.addAttribute("title", "Orders for Store ID " + id);
+                }
+            } else if ("shipments".equals(entity)) {
+                if ("customer".equals(subType)) {
+                    rawData = shipmentApiClient.findByCustomerId(id);
+                    model.addAttribute("title", "Shipments for Customer ID " + id);
+                } else if ("store".equals(subType)) {
+                    rawData = shipmentApiClient.findByStoreId(id);
+                    model.addAttribute("title", "Shipments for Store ID " + id);
+                }
+            } else if ("inventory".equals(entity)) {
+                if ("store".equals(subType)) {
+                    rawData = inventoryApiClient.findByStoreId(id);
+                    model.addAttribute("title", "Inventory for Store ID " + id);
+                } else if ("product".equals(subType)) {
+                    rawData = inventoryApiClient.findByProductId(id);
+                    model.addAttribute("title", "Inventory for Product ID " + id);
+                }
+            }
+            
+            if (rawData == null) {
+                model.addAttribute("error", "Unsupported API path: /" + entity + "/" + subType + "/" + id);
+                return "api-result";
+            }
+            
+            model.addAttribute("type", "LIST");
+            model.addAttribute("data", convertToMapList(rawData));
+        } catch (Exception e) {
+            model.addAttribute("error", "Error: " + e.getMessage());
+        }
+        return "api-result";
+    }
+
     @GetMapping("/{entity}/search")
     public String search(@PathVariable String entity, @RequestParam(defaultValue = "test") String name, Model model) {
         try {
