@@ -26,11 +26,13 @@ public class ApiViewController {
     private final OrderApiClient orderApiClient;
     private final ShipmentApiClient shipmentApiClient;
     private final InventoryApiClient inventoryApiClient;
+    private final OrderItemApiClient orderItemApiClient;
     private final ObjectMapper objectMapper;
 
     public ApiViewController(CustomerApiClient customerApiClient, ProductApiClient productApiClient,
                              StoreApiClient storeApiClient, OrderApiClient orderApiClient,
                              ShipmentApiClient shipmentApiClient, InventoryApiClient inventoryApiClient,
+                             OrderItemApiClient orderItemApiClient,
                              ObjectMapper objectMapper) {
         this.customerApiClient = customerApiClient;
         this.productApiClient = productApiClient;
@@ -38,6 +40,7 @@ public class ApiViewController {
         this.orderApiClient = orderApiClient;
         this.shipmentApiClient = shipmentApiClient;
         this.inventoryApiClient = inventoryApiClient;
+        this.orderItemApiClient = orderItemApiClient;
         this.objectMapper = objectMapper;
     }
 
@@ -112,6 +115,11 @@ public class ApiViewController {
                 } else if ("product".equals(subType)) {
                     rawData = inventoryApiClient.findByProductId(id);
                     model.addAttribute("title", "Inventory for Product ID " + id);
+                }
+            } else if ("orderitems".equals(entity)) {
+                if ("order".equals(subType)) {
+                    rawData = orderItemApiClient.findByOrderId(id);
+                    model.addAttribute("title", "Order Items for Order ID " + id);
                 }
             }
             
@@ -197,6 +205,7 @@ public class ApiViewController {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private String readableNestedObject(String key, Map<String, Object> nested) {
         // Try to return only the most meaningful fields
         if (nested.containsKey("fullName")) {
@@ -208,20 +217,51 @@ public class ApiViewController {
             String name = String.valueOf(nested.get("storeName"));
             Object web = nested.get("webAddress");
             Object addr = nested.get("physicalAddress");
-            if (web != null && !web.toString().isBlank()) return name + " — " + web;
-            if (addr != null && !addr.toString().isBlank()) return name + " — " + addr.toString().replace("\n", ", ").trim();
+            if (web != null && !web.toString().isBlank()) return name + " (" + web + ")";
+            if (addr != null && !addr.toString().isBlank()) return name + " (" + addr.toString().replace("\n", ", ").trim() + ")";
             return name;
         }
         if (nested.containsKey("productName")) {
             String name = String.valueOf(nested.get("productName"));
             Object brand = nested.get("brand");
             Object price = nested.get("unitPrice");
-            return name + (brand != null ? " by " + brand : "") + (price != null ? " ($" + price + ")" : "");
+            return name + (brand != null ? " by " + brand : "") + (price != null ? " [$" + price + "]" : "");
         }
-        // Generic fallback: join key=value pairs
+        if (nested.containsKey("orderId")) {
+            String id = String.valueOf(nested.get("orderId"));
+            Object status = nested.get("orderStatus");
+            Object tms = nested.get("orderTms");
+            Object customer = nested.get("customer");
+            
+            String customerInfo = "";
+            if (customer instanceof Map) {
+                customerInfo = " for " + readableNestedObject("customer", (Map<String, Object>) customer);
+            }
+            
+            String tmsStr = "";
+            if (tms instanceof List) {
+                tmsStr = " on " + readableList("orderTms", (List<?>) tms);
+            } else if (tms != null) {
+                tmsStr = " on " + tms;
+            }
+            return "Order #" + id + customerInfo + tmsStr + (status != null ? " [" + status + "]" : "");
+        }
+        if (nested.containsKey("shipmentId")) {
+            String id = String.valueOf(nested.get("shipmentId"));
+            Object status = nested.get("status");
+            return "Shipment #" + id + (status != null ? " [" + status + "]" : "");
+        }
+        
+        // Generic fallback: join key=value pairs, but handle nested maps/lists if they appear
         return nested.entrySet().stream()
                 .filter(e -> e.getValue() != null)
-                .map(e -> e.getKey() + ": " + e.getValue())
+                .map(e -> {
+                    String k = e.getKey();
+                    Object v = e.getValue();
+                    if (v instanceof Map) return k + ": {" + readableNestedObject(k, (Map<String, Object>) v) + "}";
+                    if (v instanceof List) return k + ": " + readableList(k, (List<?>) v);
+                    return k + ": " + v;
+                })
                 .collect(java.util.stream.Collectors.joining(", "));
     }
 

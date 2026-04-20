@@ -57,6 +57,7 @@ public class HomeController {
             case "rajnandini-bawne":
                 name = "Rajnandini Bawne";
                 services.add(createServiceData("Order", "/orders"));
+                services.add(createServiceData("OrderItem", "/order-items"));
                 break;
             case "chetna-bendale":
                 name = "Chetna Bendale";
@@ -97,6 +98,14 @@ public class HomeController {
         } else if (!base.endsWith("s")) {
             base = "/api/" + service.toLowerCase() + "s";
             viewBase = "/view/api/" + service.toLowerCase() + "s";
+        }
+
+        if (service.equals("OrderItem")) {
+            List<Map<String, String>> apis = new ArrayList<>();
+            apis.add(createApi("GET", "/api/order-items/order/{id}", "Get order items by Order ID", null, "/view/api/orderitems/order"));
+            apis.add(createApi("POST", "/api/order-items", "Add a new order item", uiBase + "/new", null));
+            apis.add(createApi("DELETE", "/api/order-items/{id}", "Delete an order item", uiBase + "/delete/{id}", null));
+            return apis;
         }
 
         List<Map<String, String>> apis = new ArrayList<>();
