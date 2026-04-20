@@ -64,6 +64,12 @@ public class OrderApiClient {
         return objectMapper.readValue(response.body(), OrderDTO.class);
     }
 
+    public List<OrderDTO> findByStoreId(Integer storeId) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/store/" + storeId)).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), new TypeReference<List<OrderDTO>>() {});
+    }
+
     public void deleteById(Integer id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id)).DELETE().build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());

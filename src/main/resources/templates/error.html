@@ -10,10 +10,17 @@
 
 <div class="container" style="max-width: 500px;">
     <div class="form-card" style="text-align: center; padding: 3rem;">
-        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
-        <h2 style="color: #e74c3c; margin-bottom: 1rem;">Oops! Something went wrong</h2>
-        <p th:text="${errorMessage}" style="color: #7f8c8d; margin-bottom: 2rem;">An unexpected error occurred.</p>
-
+        <th:block th:if="${status == 403}">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🚫</div>
+            <h2 style="color: #e74c3c; margin-bottom: 1rem;">You are not allowed!</h2>
+            <p style="color: #7f8c8d; margin-bottom: 2rem;">Read-only customer access active. You do not have permission to perform this action. Administrator rights are required.</p>
+        </th:block>
+        
+        <th:block th:unless="${status == 403}">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+            <h2 style="color: #e74c3c; margin-bottom: 1rem;">Oops! Something went wrong</h2>
+            <p th:text="${errorMessage != null ? errorMessage : (message != null ? message : 'An unexpected error occurred.')}" style="color: #7f8c8d; margin-bottom: 2rem;">An unexpected error occurred.</p>
+        </th:block>
         <div class="actions" style="justify-content: center; gap: 1rem;">
             <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
             <a th:href="@{/}" class="btn btn-secondary">Home Page</a>

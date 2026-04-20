@@ -1,6 +1,7 @@
 package com.example.frontend_orderinventory.service;
 
 import com.example.frontend_orderinventory.dto.ProductDTO;
+import com.example.frontend_orderinventory.dto.InventoryDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 @Service
-public class ProductApiClient {
+public class  ProductApiClient {
 
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
@@ -62,6 +63,12 @@ public class ProductApiClient {
         HttpRequest request = builder.build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         return objectMapper.readValue(response.body(), ProductDTO.class);
+    }
+
+    public List<InventoryDTO> getInventory(Integer id) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id + "/inventory")).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), new TypeReference<List<InventoryDTO>>() {});
     }
 
     public void deleteById(Integer id) throws Exception {

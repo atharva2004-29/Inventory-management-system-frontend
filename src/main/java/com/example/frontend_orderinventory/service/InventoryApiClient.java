@@ -70,6 +70,41 @@ public class InventoryApiClient {
         return objectMapper.readValue(response.body(), InventoryDTO.class);
     }
 
+    public List<InventoryDTO> findLowStock(Integer threshold) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/low-stock?threshold=" + threshold)).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), new TypeReference<List<InventoryDTO>>() {});
+    }
+
+    public InventoryDTO updateQuantity(Integer id, Integer productInventory) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/" + id + "/quantity?productInventory=" + productInventory))
+                .method("PATCH", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException("Backend returned error " + response.statusCode() + ": " + response.body());
+        }
+        return objectMapper.readValue(response.body(), InventoryDTO.class);
+    }
+
+    public boolean reserveStock(Integer productId, Integer quantity) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/reserve?productId=" + productId + "&quantity=" + quantity))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.statusCode() == 200;
+    }
+
+    public void releaseStock(Integer productId, Integer quantity) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(baseUrl + "/release?productId=" + productId + "&quantity=" + quantity))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+        httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
     public void deleteById(Integer id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id)).DELETE().build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());

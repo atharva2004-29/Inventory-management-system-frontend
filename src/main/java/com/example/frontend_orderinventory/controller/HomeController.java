@@ -103,9 +103,30 @@ public class HomeController {
 
         apis.add(createApi("GET", base, "List all " + service + "s", viewBase, null));
         apis.add(createApi("GET", base + "/{id}", "Get " + service + " details (Dynamic ID)", null, viewBase));
+        
+        if (service.equals("Order")) {
+            apis.add(createApi("GET", base + "/customer/{id}", "Get orders by customer ID", null, viewBase + "/customer"));
+            apis.add(createApi("GET", base + "/store/{id}", "Get orders by store ID", null, viewBase + "/store"));
+        } else if (service.equals("Customer")) {
+            apis.add(createApi("GET", base + "/{id}/orders", "Get customer orders", null, "/view/api/orders/customer"));
+            apis.add(createApi("GET", base + "/{id}/shipments", "Get customer shipments", null, "/view/api/shipments/customer"));
+        } else if (service.equals("Store")) {
+            apis.add(createApi("GET", base + "/{id}/inventory", "Get store inventory", null, "/view/api/inventory/store"));
+            apis.add(createApi("GET", base + "/{id}/orders", "Get store orders", null, "/view/api/orders/store"));
+            apis.add(createApi("GET", base + "/{id}/shipments", "Get store shipments", null, "/view/api/shipments/store"));
+        } else if (service.equals("Shipment")) {
+            apis.add(createApi("GET", base + "/customer/{id}", "Get shipments by customer ID", null, viewBase + "/customer"));
+        } else if (service.equals("Product")) {
+            apis.add(createApi("GET", base + "/{id}/inventory", "Get product inventory", null, "/view/api/inventory/product"));
+        }
+
         apis.add(createApi("POST", base, "Create a new " + service, uiBase + "/new", null));
         apis.add(createApi("PUT", base + "/{id}", "Update existing " + service + " (Mock Link)", uiBase, null));
-        apis.add(createApi("GET", base + "/search?name=test", "Search " + service + "s", viewBase + "/search", null));
+        
+        Map<String, String> searchApi = createApi("GET", base + "/search?name={name}", "Search " + service + "s by name", null, null);
+        searchApi.put("uiLinkSearchBase", viewBase + "/search");
+        apis.add(searchApi);
+        
         apis.add(createApi("PATCH", base + "/{id}/status", "Update " + service + " status", uiBase, null));
 
         return apis;

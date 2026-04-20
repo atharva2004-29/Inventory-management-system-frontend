@@ -130,6 +130,14 @@
             const id = idInput ? idInput.value : '1';
             window.location.href = baseUrl + '/' + id;
         }
+
+        function tryWithSearchName(button) {
+            const baseUrl = button.getAttribute('data-base-base-url');
+            const rowId = button.getAttribute('data-row-id');
+            const searchInput = document.getElementById('search-input-' + rowId);
+            const name = searchInput ? searchInput.value : '';
+            window.location.href = baseUrl + '?name=' + encodeURIComponent(name);
+        }
     </script>
 </head>
 <body>
@@ -179,6 +187,14 @@
                                    th:data-base-base-url="${api['uiLinkBase']}" 
                                    th:data-row-id="${apiStat.index}"
                                    onclick="tryWithId(this)">Try it &rarr;</a>
+                            </th:block>
+
+                            <th:block th:if="${api['uiLinkSearchBase'] != null}">
+                                <input type="text" class="id-input" th:id="'search-input-' + ${apiStat.index}" placeholder="Name..." style="width: 100px;">
+                                <a href="javascript:void(0)" class="btn-try" 
+                                   th:data-base-base-url="${api['uiLinkSearchBase']}" 
+                                   th:data-row-id="${apiStat.index}"
+                                   onclick="tryWithSearchName(this)">Try it &rarr;</a>
                             </th:block>
                         </td>
                     </tr>
