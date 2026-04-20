@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Error - Order Inventory Management System</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f8f9fa;">
+
+<div class="container" style="max-width: 500px;">
+    <div class="form-card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+        <h2 style="color: #e74c3c; margin-bottom: 1rem;">Oops! Something went wrong</h2>
+        <p th:text="${errorMessage}" style="color: #7f8c8d; margin-bottom: 2rem;">An unexpected error occurred.</p>
+
+        <div class="actions" style="justify-content: center; gap: 1rem;">
+            <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
+            <a th:href="@{/}" class="btn btn-secondary">Home Page</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

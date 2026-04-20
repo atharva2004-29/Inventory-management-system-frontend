@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head(${formTitle})}"></head>
+<body>
+
+<div class="container">
+    <h2 th:text="${formTitle}">Store Form</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="form-card">
+        <form th:action="@{/stores/save}" th:object="${store}" method="post">
+            <input type="hidden" th:field="*{storeId}"/>
+
+            <div class="form-group">
+                <label for="storeName">Store Name</label>
+                <input type="text" id="storeName" th:field="*{storeName}" placeholder="Enter store name" required/>
+                <span th:if="${#fields.hasErrors('storeName')}" th:errors="*{storeName}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="webAddress">Web Address</label>
+                <input type="text" id="webAddress" th:field="*{webAddress}" placeholder="Enter web address (optional)"/>
+            </div>
+
+            <div class="form-group">
+                <label for="physicalAddress">Physical Address</label>
+                <textarea id="physicalAddress" th:field="*{physicalAddress}" placeholder="Enter physical address (optional)" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="latitude">Latitude</label>
+                <input type="number" id="latitude" th:field="*{latitude}" placeholder="Enter latitude (optional)" step="0.000001"/>
+            </div>
+
+            <div class="form-group">
+                <label for="longitude">Longitude</label>
+                <input type="number" id="longitude" th:field="*{longitude}" placeholder="Enter longitude (optional)" step="0.000001"/>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Save Store</button>
+                <a th:href="@{/stores}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

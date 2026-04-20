@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head(${formTitle})}"></head>
+<body>
+
+<div class="container">
+    <h2 th:text="${formTitle}">Inventory Form</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="form-card">
+        <form th:action="@{/inventory/save}" th:object="${inventory}" method="post">
+            <input type="hidden" th:field="*{inventoryId}"/>
+
+            <div class="form-group">
+                <label for="product">Product</label>
+                <select id="product" th:field="*{product}" required>
+                    <option value="">-- Select Product --</option>
+                    <option th:each="p : ${products}" th:value="${p.productId}" th:text="${p.productName} + ' (' + ${p.brand} + ')'"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('product')}" th:errors="*{product}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="store">Store</label>
+                <select id="store" th:field="*{store}" required>
+                    <option value="">-- Select Store --</option>
+                    <option th:each="s : ${stores}" th:value="${s.storeId}" th:text="${s.storeName}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('store')}" th:errors="*{store}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="productInventory">Stock Quantity</label>
+                <input type="number" id="productInventory" th:field="*{productInventory}" placeholder="Enter quantity" min="0" required/>
+                <span th:if="${#fields.hasErrors('productInventory')}" th:errors="*{productInventory}" class="alert-error"></span>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Save Inventory</button>
+                <a th:href="@{/inventory}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

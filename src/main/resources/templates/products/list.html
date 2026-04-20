@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Products - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Products</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/products/new}" class="btn btn-primary">+ Add Product</a>
+    </div>
+
+    <!-- Search -->
+    <form th:action="@{/products}" method="get" class="actions" style="margin-bottom: 2rem;">
+        <input type="text" name="search" placeholder="Search by name..." th:value="${search}" style="flex-grow: 1; min-width: 200px;"/>
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <a th:href="@{/products}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Brand</th>
+                <th>Colour</th>
+                <th>Size</th>
+                <th>Unit Price</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(products)}">
+                <td colspan="8">No products found.</td>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.productId}"></td>
+                <td th:text="${product.productName}"></td>
+                <td th:text="${product.brand}"></td>
+                <td th:text="${product.colour}"></td>
+                <td th:text="${product.size}"></td>
+                <td th:text="${product.unitPrice}"></td>
+                <td th:text="${product.rating}"></td>
+                <td class="actions">
+                    <a th:href="@{/products/edit/{id}(id=${product.productId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/products/delete/{id}(id=${product.productId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this product?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

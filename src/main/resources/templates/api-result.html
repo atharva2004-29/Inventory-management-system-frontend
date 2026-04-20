@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title}">API Result</title>
+    <link rel="stylesheet" th:href="@{/css/landing.css}"/>
+    <style>
+        .result-container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1.5rem;
+        }
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .data-table th, .data-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .data-table th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .data-table tr:hover {
+            background: #fdfdfd;
+        }
+        .single-record {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .data-item {
+            padding: 1.25rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #edf2f7;
+        }
+        .data-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .data-value {
+            font-size: 1rem;
+            color: #1e293b;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #94a3b8;
+        }
+        .count-view {
+            text-align: center;
+            padding: 3rem;
+            font-size: 4rem;
+            font-weight: 800;
+            color: #3498db;
+        }
+        .raw-view {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-top: 1rem;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .btn-back:hover {
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>System API Explorer</h1>
+</header>
+
+<div class="container">
+    <div class="result-container">
+        <div th:if="${error}" class="alert alert-error" style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 8px; color: #991b1b;">
+            <p style="margin:0; font-weight: 500;" th:text="${error}"></p>
+        </div>
+
+        <div class="result-header">
+            <div>
+                <a href="javascript:history.back()" class="btn-back">&larr; Back to Dashboard</a>
+                <h2 th:text="${title}" style="margin: 0.5rem 0 0 0; color: #1e293b;">API Result</h2>
+            </div>
+            <span class="badge" th:text="${type}">LIST</span>
+        </div>
+
+        <!-- LIST VIEW -->
+        <div th:if="${type == 'LIST'}">
+            <div th:if="${#lists.isEmpty(data)}" class="empty-state">
+                <p>No records found for this query.</p>
+            </div>
+            <table th:if="${not #lists.isEmpty(data)}" class="data-table">
+                <thead>
+                    <tr>
+                        <!-- Dynamically show keys from first element -->
+                        <th th:each="entry : ${data[0]}" th:text="${entry.key}">ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="row : ${data}">
+                        <td th:each="entry : ${row}" th:text="${entry.value}">Value</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SINGLE RECORD VIEW -->
+        <div th:if="${type == 'SINGLE'}" class="single-record">
+            <div th:each="entry : ${data}" class="data-item">
+                <div class="data-label" th:text="${entry.key}">Key</div>
+                <div class="data-value" th:text="${entry.value}">Value</div>
+            </div>
+            <div th:if="${data == null}" class="empty-state">
+                <p>Record not found or invalid ID.</p>
+            </div>
+        </div>
+
+        <!-- COUNT VIEW -->
+        <div th:if="${type == 'COUNT'}" class="count-view">
+            <span th:text="${data}">0</span>
+            <div style="font-size: 1.2rem; color: #64748b; font-weight: 500; margin-top: 1rem;">Total Records</div>
+        </div>
+
+        <!-- RAW/TEXT VIEW (Export) -->
+        <div th:if="${type == 'RAW'}">
+            <div class="raw-view" th:text="${data}">Raw content here...</div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

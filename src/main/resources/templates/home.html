@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Admin Dashboard - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <h2>System Overview</h2>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Module</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>Customers</td><td><a th:href="@{/customers}" class="btn btn-primary">Manage Customers</a></td></tr>
+            <tr><td>Products</td><td><a th:href="@{/products}" class="btn btn-primary">Manage Products</a></td></tr>
+            <tr><td>Stores</td><td><a th:href="@{/stores}" class="btn btn-primary">Manage Stores</a></td></tr>
+            <tr><td>Orders</td><td><a th:href="@{/orders}" class="btn btn-primary">Manage Orders</a></td></tr>
+            <tr><td>Inventory</td><td><a th:href="@{/inventory}" class="btn btn-primary">Manage Inventory</a></td></tr>
+            <tr><td>Shipments</td><td><a th:href="@{/shipments}" class="btn btn-primary">Manage Shipments</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

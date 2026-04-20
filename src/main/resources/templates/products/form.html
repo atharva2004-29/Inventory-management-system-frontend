@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head(${formTitle})}"></head>
+<body>
+
+<div class="container">
+    <h2 th:text="${formTitle}">Product Form</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="form-card">
+        <form th:action="@{/products/save}" th:object="${product}" method="post">
+            <input type="hidden" th:field="*{productId}"/>
+
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" th:field="*{productName}" placeholder="Enter product name" required/>
+                <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" th:field="*{brand}" placeholder="Enter brand" required/>
+                <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="colour">Colour</label>
+                <input type="text" id="colour" th:field="*{colour}" placeholder="Enter colour"/>
+                <span th:if="${#fields.hasErrors('colour')}" th:errors="*{colour}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="size">Size</label>
+                <select id="size" th:field="*{size}">
+                    <option value="">-- Select Size --</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                </select>
+                <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="unitPrice">Unit Price</label>
+                <input type="number" id="unitPrice" th:field="*{unitPrice}" placeholder="Enter unit price" step="0.01" min="0" required/>
+                <span th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Rating (1-5)</label>
+                <select id="rating" th:field="*{rating}">
+                    <option value="">-- Select Rating --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="alert-error"></span>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Save Product</button>
+                <a th:href="@{/products}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

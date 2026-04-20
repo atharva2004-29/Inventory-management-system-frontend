@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${memberName != null ? memberName + ' - Service Details' : 'Member Details'}">Member Details</title>
+    <link rel="stylesheet" th:href="@{/css/landing.css}"/>
+    <style>
+        .page-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 2rem;
+        }
+        .service-section {
+            margin-bottom: 4rem;
+        }
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        .btn-direct {
+            padding: 0.6rem 1.5rem;
+            background: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-direct:hover {
+            background: #2980b9;
+        }
+        .btn-try {
+            padding: 0.45rem 0.9rem;
+            background: #fff;
+            color: #3498db;
+            border: 1.5px solid #3498db;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-try:hover {
+            background: #3498db;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .api-table th, .api-table td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .api-table th {
+            background: #f1f5f9;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        .method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+        .GET { background: #dcfce7; color: #166534; }
+        .POST { background: #dbeafe; color: #1e40af; }
+        .PUT { background: #fef9c3; color: #854d0e; }
+        .DELETE { background: #fee2e2; color: #991b1b; }
+        .PATCH { background: #f3e8ff; color: #6b21a8; }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            color: #1e293b;
+        }
+        .action-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .id-input {
+            width: 60px;
+            padding: 0.4rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .id-input:focus {
+            border-color: #3498db;
+        }
+    </style>
+    <script th:inline="javascript">
+        function tryWithId(button) {
+            const baseUrl = button.getAttribute('data-base-base-url');
+            const rowId = button.getAttribute('data-row-id');
+            const idInput = document.getElementById('id-input-' + rowId);
+            const id = idInput ? idInput.value : '1';
+            window.location.href = baseUrl + '/' + id;
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Member Service Dashboard</h1>
+</header>
+
+<div class="container" style="max-width: 1000px;">
+    <div class="page-container">
+        <div class="header">
+            <h2 th:text="${memberName}">Atharva Dhemare</h2>
+            <p style="color: #64748b;">Managing the following backend modules and APIs</p>
+        </div>
+
+        <div th:each="service : ${services}" class="service-section">
+            <div class="service-header">
+                <div>
+                    <h3 th:text="${service['name']}" style="margin:0; color: #1e293b;">Service Name</h3>
+                </div>
+                <a th:href="${service['url']}" class="btn-direct">Go to Module UI</a>
+            </div>
+
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">Method</th>
+                        <th>Endpoint</th>
+                        <th>Description</th>
+                        <th style="width: 120px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="api : ${service['apis']}">
+                        <td><span th:class="'method ' + ${api['method']}" th:text="${api['method']}">GET</span></td>
+                        <td th:text="${api['uri']}" style="font-family: monospace; color: #475569;">/api/endpoint</td>
+                        <td th:text="${api['description']}">Description</td>
+                        <td class="action-cell">
+                            <!-- Show buttons for everyone, rely on Spring Security for exceptions -->
+                            <a th:if="${api['uiLink'] != null}" 
+                               th:href="${api['uiLink']}" 
+                               class="btn-try">Try it &rarr;</a>
+                            
+                            <th:block th:if="${api['uiLinkBase'] != null}">
+                                <input type="number" class="id-input" th:id="'id-input-' + ${apiStat.index}" value="1" min="1">
+                                <a href="javascript:void(0)" class="btn-try" 
+                                   th:data-base-base-url="${api['uiLinkBase']}" 
+                                   th:data-row-id="${apiStat.index}"
+                                   onclick="tryWithId(this)">Try it &rarr;</a>
+                            </th:block>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/dashboard" class="back-link">&larr; Back to Dashboard</a>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

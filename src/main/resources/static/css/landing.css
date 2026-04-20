@@ -1,0 +1,231 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #3498db;
+    --background-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-color: #1e293b;
+    --border-color: #e2e8f0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+/* Team Section - Simple & Vertical */
+.team-section {
+    margin-bottom: 4rem;
+}
+
+.team-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.team-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+}
+
+.team-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.team-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: var(--accent-color);
+}
+
+.avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #475569;
+    flex-shrink: 0;
+}
+
+.team-info {
+    flex-grow: 1;
+}
+
+.team-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+.team-card .role {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Service View Overlay */
+.service-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.service-view.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.service-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+.service-content h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.service-grid {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.service-btn {
+    padding: 1rem 2rem;
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.service-btn:hover {
+    background: #2980b9;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #94a3b8;
+}
+
+/* Login Section */
+.login-section {
+    background: #fff;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    max-width: 400px;
+    margin: 0 auto 5rem auto;
+    text-align: center;
+}
+
+.login-section h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.login-links a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+

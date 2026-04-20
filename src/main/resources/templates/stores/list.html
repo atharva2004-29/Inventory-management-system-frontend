@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Stores - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Stores</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/stores/new}" class="btn btn-primary">+ Add Store</a>
+    </div>
+
+    <!-- Search -->
+    <form th:action="@{/stores}" method="get" class="actions" style="margin-bottom: 2rem;">
+        <input type="text" name="search" placeholder="Search by name..." th:value="${search}" style="flex-grow: 1; min-width: 200px;"/>
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <a th:href="@{/stores}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Store Name</th>
+                <th>Web Address</th>
+                <th>Physical Address</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(stores)}">
+                <td colspan="7">No stores found.</td>
+            </tr>
+            <tr th:each="store : ${stores}">
+                <td th:text="${store.storeId}"></td>
+                <td th:text="${store.storeName}"></td>
+                <td th:text="${store.webAddress}"></td>
+                <td th:text="${store.physicalAddress}"></td>
+                <td th:text="${store.latitude}"></td>
+                <td th:text="${store.longitude}"></td>
+                <td class="actions">
+                    <a th:href="@{/stores/edit/{id}(id=${store.storeId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/stores/delete/{id}(id=${store.storeId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this store?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

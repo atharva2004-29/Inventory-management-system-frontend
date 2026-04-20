@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head(${formTitle})}"></head>
+<body>
+
+<div class="container">
+    <h2 th:text="${formTitle}">Shipment Form</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="form-card">
+        <form th:action="@{/shipments/save}" th:object="${shipment}" method="post">
+            <input type="hidden" th:field="*{shipmentId}"/>
+
+            <div class="form-group">
+                <label for="customer">Customer</label>
+                <select id="customer" th:field="*{customer}" required>
+                    <option value="">-- Select Customer --</option>
+                    <option th:each="c : ${customers}" th:value="${c.customerId}" th:text="${c.fullName}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('customer')}" th:errors="*{customer}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="store">Store</label>
+                <select id="store" th:field="*{store}" required>
+                    <option value="">-- Select Store --</option>
+                    <option th:each="s : ${stores}" th:value="${s.storeId}" th:text="${s.storeName}"></option>
+                </select>
+                <span th:if="${#fields.hasErrors('store')}" th:errors="*{store}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="deliveryAddress">Delivery Address</label>
+                <textarea id="deliveryAddress" th:field="*{deliveryAddress}" placeholder="Enter delivery address" rows="3" required></textarea>
+                <span th:if="${#fields.hasErrors('deliveryAddress')}" th:errors="*{deliveryAddress}" class="alert-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="shipmentStatus">Status</label>
+                <select id="shipmentStatus" th:field="*{shipmentStatus}" required>
+                    <option value="">-- Select Status --</option>
+                    <option value="CREATED">CREATED</option>
+                    <option value="SHIPPED">SHIPPED</option>
+                    <option value="IN-TRANSIT">IN-TRANSIT</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Save Shipment</button>
+                <a th:href="@{/shipments}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

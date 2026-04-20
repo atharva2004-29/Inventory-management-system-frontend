@@ -1,0 +1,57 @@
+<head th:replace="~{layout :: common-head('Inventory - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Inventory</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/inventory/new}" class="btn btn-primary">+ Add Inventory</a>
+    </div>
+
+    <!-- Search / Filter -->
+    <form th:action="@{/inventory}" method="get" style="flex-direction: row; align-items: center; max-width: 100%; gap: 0.5rem; margin-bottom: 1rem;">
+        <input type="text" name="productName" placeholder="Product name..." th:value="${productName}" style="flex-grow: 1; min-width: 150px;"/>
+        <select name="storeId">
+            <option value="">-- All Stores --</option>
+            <option th:each="s : ${stores}" th:value="${s.storeId}" th:text="${s.storeName}" th:selected="${s.storeId == storeId}"></option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Filter</button>
+        <a th:href="@{/inventory}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Store</th>
+                <th>Stock Quantity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(inventories)}">
+                <td colspan="5">No inventory records found.</td>
+            </tr>
+            <tr th:each="inv : ${inventories}">
+                <td th:text="${inv.inventoryId}"></td>
+                <td th:text="${inv.product.productName}"></td>
+                <td th:text="${inv.store.storeName}"></td>
+                <td th:text="${inv.productInventory}"></td>
+                <td class="actions">
+                    <a th:href="@{/inventory/edit/{id}(id=${inv.inventoryId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/inventory/delete/{id}(id=${inv.inventoryId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this inventory record?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

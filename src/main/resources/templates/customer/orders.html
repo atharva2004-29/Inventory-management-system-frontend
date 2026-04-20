@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('My Orders')}"></head>
+<body>
+
+<div class="container">
+    <h2>My Orders</h2>
+
+    <nav th:replace="~{layout :: customer-nav}"></nav>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Store</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Items</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td colspan="5">No orders found.</td>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderId}"></td>
+                <td th:text="${order.store.storeName}"></td>
+                <td th:text="${order.orderStatus}"></td>
+                <td th:text="${order.orderTms}"></td>
+                <td>
+                    <a th:href="@{/customer/orders/{id}/items(id=${order.orderId})}" class="btn btn-primary">
+                        View Items
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

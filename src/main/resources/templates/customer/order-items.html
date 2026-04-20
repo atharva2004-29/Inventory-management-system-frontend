@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Order Items')}"></head>
+<body>
+
+<div class="container">
+    <h2>Order Items — Order #<span th:text="${orderId}"></span></h2>
+
+    <nav th:replace="~{layout :: customer-nav}"></nav>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Brand</th>
+                <th>Size</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(items)}">
+                <td colspan="5">No items found for this order.</td>
+            </tr>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.product.productName}"></td>
+                <td th:text="${item.product.brand}"></td>
+                <td th:text="${item.product.size}"></td>
+                <td th:text="${item.unitPrice}"></td>
+                <td th:text="${item.quantity}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions" style="margin-top: 2rem;">
+        <a th:href="@{/customer/orders}" class="btn btn-secondary">Back to My Orders</a>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

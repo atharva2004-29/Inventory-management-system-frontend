@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Orders - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Orders</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/orders/new}" class="btn btn-primary">+ Create New Order</a>
+    </div>
+
+    <!-- Search/Filter -->
+    <form th:action="@{/orders}" method="get" class="actions" style="margin-bottom: 2rem;">
+        <input type="text" name="customerName" placeholder="Customer Name..." th:value="${customerName}" style="flex-grow: 1; min-width: 150px;"/>
+        <select name="status">
+            <option value="">-- All Statuses --</option>
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Filter</button>
+        <a th:href="@{/orders}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Store</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td colspan="6">No orders found.</td>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderId}"></td>
+                <td th:text="${order.customer.fullName}"></td>
+                <td th:text="${order.store.storeName}"></td>
+                <td th:text="${order.orderStatus}"></td>
+                <td th:text="${order.orderTms}"></td>
+                <td class="actions">
+                    <a th:href="@{/orders/edit/{id}(id=${order.orderId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/orders/delete/{id}(id=${order.orderId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this order?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

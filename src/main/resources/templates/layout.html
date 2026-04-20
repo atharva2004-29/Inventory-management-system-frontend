@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common-head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title}">Order Inventory System</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+</head>
+<body>
+
+<!-- Admin Navigation Fragment -->
+<nav th:fragment="admin-nav">
+    <div class="nav-links">
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/customers}">Customers</a>
+        <a th:href="@{/products}">Products</a>
+        <a th:href="@{/stores}">Stores</a>
+        <a th:href="@{/orders}">Orders</a>
+        <a th:href="@{/inventory}">Inventory</a>
+        <a th:href="@{/shipments}">Shipments</a>
+    </div>
+    <form th:action="@{/logout}" method="post" style="display:inline; margin: 0;">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem;">Logout</button>
+    </form>
+</nav>
+
+<!-- Customer Navigation Fragment -->
+<nav th:fragment="customer-nav">
+    <div class="nav-links">
+        <a th:href="@{/customer/dashboard}">Dashboard</a>
+        <a th:href="@{/customer/products}">Browse Products</a>
+        <a th:href="@{/customer/orders}">My Orders</a>
+        <a th:href="@{/customer/shipments}">My Shipments</a>
+    </div>
+    <form th:action="@{/logout}" method="post" style="display:inline; margin: 0;">
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem;">Logout</button>
+    </form>
+</nav>
+
+<div class="container">
+    <th:block th:fragment="content"></th:block>
+</div>
+
+    <th:block th:fragment="content"></th:block>
+</div>
+
+</body>
+</html>

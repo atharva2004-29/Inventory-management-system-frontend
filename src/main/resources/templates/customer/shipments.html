@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('My Shipments')}"></head>
+<body>
+
+<div class="container">
+    <h2>My Shipments</h2>
+
+    <nav th:replace="~{layout :: customer-nav}"></nav>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Shipment ID</th>
+                <th>Store</th>
+                <th>Delivery Address</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(shipments)}">
+                <td colspan="4">No shipments found.</td>
+            </tr>
+            <tr th:each="shipment : ${shipments}">
+                <td th:text="${shipment.shipmentId}"></td>
+                <td th:text="${shipment.store.storeName}"></td>
+                <td th:text="${shipment.deliveryAddress}"></td>
+                <td th:text="${shipment.shipmentStatus}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

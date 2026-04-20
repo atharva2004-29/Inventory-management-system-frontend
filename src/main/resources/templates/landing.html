@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Inventory Management System</title>
+    <link rel="stylesheet" th:href="@{/css/landing.css}" />
+</head>
+
+<body>
+
+    <header>
+        <h1>Order Inventory Management System</h1>
+    </header>
+
+    <div class="container">
+        <section class="team-section">
+            <h2 class="team-title">Meet Our Team</h2>
+            <div class="team-container">
+                <a th:href="@{'/member/atharva-dhemare'}" class="team-card" style="text-decoration: none;">
+                    <div class="avatar-placeholder">AD</div>
+                    <div class="team-info">
+                        <h3>Atharva Dhemare</h3>
+                        <p class="role">Customer & Product</p>
+                    </div>
+                </a>
+                <a th:href="@{'/member/rajnandini-bawne'}" class="team-card" style="text-decoration: none;">
+                    <div class="avatar-placeholder">RB</div>
+                    <div class="team-info">
+                        <h3>Rajnandini Bawne</h3>
+                        <p class="role">Order Management</p>
+                    </div>
+                </a>
+                <a th:href="@{'/member/chetna-bendale'}" class="team-card" style="text-decoration: none;">
+                    <div class="avatar-placeholder">CH</div>
+                    <div class="team-info">
+                        <h3>Chetna Bendale</h3>
+                        <p class="role">Store Operations</p>
+                    </div>
+                </a>
+                <a th:href="@{'/member/yash-mukkawar'}" class="team-card" style="text-decoration: none;">
+                    <div class="avatar-placeholder">YM</div>
+                    <div class="team-info">
+                        <h3>Yash Mukkawar</h3>
+                        <p class="role">Shipment Logistics</p>
+                    </div>
+                </a>
+                <a th:href="@{'/member/ranjeet-patil'}" class="team-card" style="text-decoration: none;">
+                    <div class="avatar-placeholder">RJ</div>
+                    <div class="team-info">
+                        <h3>Ranjeet Patil</h3>
+                        <p class="role">Inventory Control</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="login-section">
+            <h2>Customer Login</h2>
+
+            <div th:if="${errorMessage}" style="color:#ef4444; margin-bottom: 1.5rem; font-weight: 500;">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <div th:if="${successMessage}" style="color:#10b981; margin-bottom: 1.5rem; font-weight: 500;">
+                <p th:text="${successMessage}"></p>
+            </div>
+
+            <form th:action="@{/customer-login}" method="post" class="login-form">
+                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="login-links">
+                <p>Are you an admin? <a th:href="@{/admin-login}">Admin Login</a></p>
+                <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+            </div>
+        </section>
+    </div>
+
+
+    <footer>
+        <p>&copy; 2026 Order Inventory Management System. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

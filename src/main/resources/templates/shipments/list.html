@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Shipments - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Shipments</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/shipments/new}" class="btn btn-primary">+ Add Shipment</a>
+    </div>
+
+    <!-- Filter by status -->
+    <form th:action="@{/shipments}" method="get" class="actions" style="margin-bottom: 2rem;">
+        <select name="status" style="flex-grow: 1;">
+            <option value="">-- All Statuses --</option>
+            <option value="CREATED"    th:selected="${selectedStatus == 'CREATED'}">CREATED</option>
+            <option value="SHIPPED"    th:selected="${selectedStatus == 'SHIPPED'}">SHIPPED</option>
+            <option value="IN-TRANSIT" th:selected="${selectedStatus == 'IN-TRANSIT'}">IN-TRANSIT</option>
+            <option value="DELIVERED"  th:selected="${selectedStatus == 'DELIVERED'}">DELIVERED</option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Filter</button>
+        <a th:href="@{/shipments}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Store</th>
+                <th>Delivery Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(shipments)}">
+                <td colspan="6">No shipments found.</td>
+            </tr>
+            <tr th:each="shipment : ${shipments}">
+                <td th:text="${shipment.shipmentId}"></td>
+                <td th:text="${shipment.customer.fullName}"></td>
+                <td th:text="${shipment.store.storeName}"></td>
+                <td th:text="${shipment.deliveryAddress}"></td>
+                <td th:text="${shipment.shipmentStatus}"></td>
+                <td class="actions">
+                    <a th:href="@{/shipments/edit/{id}(id=${shipment.shipmentId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/shipments/delete/{id}(id=${shipment.shipmentId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this shipment?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

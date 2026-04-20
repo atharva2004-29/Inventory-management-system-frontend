@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: common-head('Customers - Order Inventory System')}"></head>
+<body>
+
+<div class="container">
+    <h2>Customers</h2>
+
+    <nav th:replace="~{layout :: admin-nav}"></nav>
+
+    <div class="actions mb-2">
+        <a th:href="@{/customers/new}" class="btn btn-primary">+ Add Customer</a>
+    </div>
+
+    <!-- Search -->
+    <form th:action="@{/customers}" method="get" class="actions" style="margin-bottom: 2rem;">
+        <input type="text" name="search" placeholder="Search by name..." th:value="${search}" style="flex-grow: 1; min-width: 200px;"/>
+        <button type="submit" class="btn btn-secondary">Search</button>
+        <a th:href="@{/customers}" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(customers)}">
+                <td colspan="4">No customers found.</td>
+            </tr>
+            <tr th:each="customer : ${customers}">
+                <td th:text="${customer.customerId}"></td>
+                <td th:text="${customer.fullName}"></td>
+                <td th:text="${customer.emailAddress}"></td>
+                <td class="actions">
+                    <a th:href="@{/customers/edit/{id}(id=${customer.customerId})}" class="btn btn-primary">Edit</a>
+                    <a th:href="@{/customers/delete/{id}(id=${customer.customerId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this customer?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #7f8c8d;">&copy; 2024 Order Inventory Management System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
