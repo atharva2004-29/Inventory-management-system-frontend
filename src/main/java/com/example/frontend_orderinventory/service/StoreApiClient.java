@@ -44,18 +44,18 @@ public class StoreApiClient {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         return objectMapper.readValue(response.body(), StoreDTO.class);
     }
-
+    public List<InventoryDTO> getInventory(Integer id) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id + "/inventory")).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), new TypeReference<List<InventoryDTO>>() {});
+    }
     public List<StoreDTO> searchByName(String name) throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/search?name=" + name)).GET().build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         return objectMapper.readValue(response.body(), new TypeReference<List<StoreDTO>>() {});
     }
 
-    public List<InventoryDTO> getInventory(Integer id) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id + "/inventory")).GET().build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        return objectMapper.readValue(response.body(), new TypeReference<List<InventoryDTO>>() {});
-    }
+
 
     public List<OrderDTO> getOrders(Integer id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl + "/" + id + "/orders")).GET().build();
